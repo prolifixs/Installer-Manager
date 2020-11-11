@@ -17,7 +17,13 @@ class GoogleDriveDownloader:
     DOWNLOAD_URL = 'https://docs.google.com/uc?export=download'
 
     @staticmethod
-    def download_file_from_google_drive(file_id, dest_path, overwrite=False, unzip=False, showsize=False):
+    def download_file_from_google_drive(file_id, 
+    dest_path, 
+    overwrite=False, 
+    unzip=False, 
+    showsize=False, 
+    zippass = False
+    ):
         """
         Downloads a shared file from google drive into a given folder.
         Optionally unzips it.
@@ -72,6 +78,10 @@ class GoogleDriveDownloader:
                     print('Unzipping...', end='')
                     stdout.flush()
                     with zipfile.ZipFile(dest_path, 'r') as z:
+                        #password must be fetched from database
+                        #z.extractall(destination_directory, pwd = bytes('password','utf-8'))
+                        if zippass:
+                            z.extractall(destination_directory, pwd = bytes('password','utf-8'))
                         z.extractall(destination_directory)
                     print('Done.')
                 except zipfile.BadZipfile:
